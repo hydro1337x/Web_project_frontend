@@ -1,19 +1,6 @@
 <template>
   <v-app id="inspire">
     <v-content>
-      <v-tabs
-        fixed-tabs
-        background-color="primary"
-        dark
-      >
-        <v-tab to="/login">
-          Login
-        </v-tab>
-
-        <v-tab to="/register">
-          Register
-        </v-tab>
-      </v-tabs>
       <v-container
         class="fill-height"
         fluid
@@ -33,38 +20,36 @@
                 dark
                 flat
               >
-                <v-toolbar-title>Login form</v-toolbar-title>
+                <v-toolbar-title>New password</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form>
-                  <v-text-field v-model="email"
-                                label="Login"
-                                name="login"
-                                prepend-icon="person"
-                                type="text">
+                  <v-text-field v-model="oldPassword"
+                                label="Old password"
+                                name="oldPassword"
+                                type="password">
 
                   </v-text-field>
 
-                  <v-text-field v-model="password"
-                                id="password"
-                                label="Password"
-                                name="password"
-                                prepend-icon="lock"
+                  <v-text-field v-model="newPassword"
+                                label="New password"
+                                name="newPassword"
                                 type="password">
 
-                    </v-text-field>
+                  </v-text-field>
 
-                    <v-layout row wrap justify-end>
-                      <v-flex shrink>
-                        <v-btn @click="pushResetPasswordPage" text small color="error" align-end>Forgot password?</v-btn>
-                      </v-flex>
-                    </v-layout>
+                  <v-text-field v-model="repeatedNewPassword"
+                                label="Repeated new password"
+                                name="repeatedNewPassword"
+                                type="password">
+
+                  </v-text-field>
 
                 </v-form>
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary" @click="handleLogin">Login</v-btn>
+                <v-btn color="primary" @click="handleResetPassword">Submit</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -98,8 +83,9 @@
     },
     data() {
       return {
-        email: '',
-        password: '',
+        oldPassword: '',
+        newPassword: '',
+        repeatedNewPassword: '',
         snackbar: false,
         snackbarText: '',
         snackbarColor: ''
@@ -107,26 +93,22 @@
     },
     methods: {
 
-      async handleLogin() {
+      async handleResetPassword() {
         try {
-          let res = await this.$axios.$post(env.axios.baseURL + 'auth/login', {
-            email: this.email,
-            password: this.password
+          let res = await this.$axios.$post(env.axios.baseURL + '/auth/password/new', {
+            oldPassword: this.oldPassword,
+            newPassword: this.newPassword,
+            repeatedNewPassword: this.repeatedNewPassword
           })
           if (res.success) {
-            this.$router.push('/')
+            this.$router.push('/login')
           }
         } catch (e) {
           console.log(e)
           this.snackbar = true
           this.snackbarText = e.response.data.message
           this.snackbarColor = 'red'
-          console.log('EMail: ' + this.email)
         }
-      },
-
-      pushResetPasswordPage() {
-        this.$router.push('/reset-password')
       }
     }
   }

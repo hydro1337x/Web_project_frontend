@@ -33,14 +33,13 @@
                 dark
                 flat
               >
-                <v-toolbar-title>Login form</v-toolbar-title>
+                <v-toolbar-title>Registration form</v-toolbar-title>
               </v-toolbar>
               <v-card-text>
                 <v-form>
                   <v-text-field v-model="email"
-                                label="Login"
-                                name="login"
-                                prepend-icon="person"
+                                label="Email"
+                                name="email"
                                 type="text">
 
                   </v-text-field>
@@ -49,22 +48,38 @@
                                 id="password"
                                 label="Password"
                                 name="password"
-                                prepend-icon="lock"
                                 type="password">
 
-                    </v-text-field>
+                  </v-text-field>
 
-                    <v-layout row wrap justify-end>
-                      <v-flex shrink>
-                        <v-btn @click="pushResetPasswordPage" text small color="error" align-end>Forgot password?</v-btn>
-                      </v-flex>
-                    </v-layout>
+                  <v-text-field v-model="repeatedPassword"
+                                id="repeatPassword"
+                                label="Repeat password"
+                                name="repeatPassword"
+                                type="password">
 
+                  </v-text-field>
+
+                  <v-text-field v-model="firstName"
+                                id="firstName"
+                                label="First name"
+                                name="firstName"
+                                type="text">
+
+                  </v-text-field>
+
+                  <v-text-field v-model="lastName"
+                                id="lastName"
+                                label="Last name"
+                                name="lastName"
+                                type="text">
+
+                  </v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary" @click="handleLogin">Login</v-btn>
+                <v-btn color="primary" @click="handleRegister">Register</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -100,6 +115,9 @@
       return {
         email: '',
         password: '',
+        repeatedPassword: '',
+        firstName: '',
+        lastName: '',
         snackbar: false,
         snackbarText: '',
         snackbarColor: ''
@@ -107,11 +125,14 @@
     },
     methods: {
 
-      async handleLogin() {
+      async handleRegister() {
         try {
-          let res = await this.$axios.$post(env.axios.baseURL + 'auth/login', {
+          let res = await this.$axios.$post(env.axios.baseURL + 'auth/register', {
             email: this.email,
-            password: this.password
+            password: this.password,
+            repeatedPassword: this.repeatedPassword,
+            firstName: this.firstName,
+            lastName: this.lastName
           })
           if (res.success) {
             this.$router.push('/')
@@ -121,12 +142,7 @@
           this.snackbar = true
           this.snackbarText = e.response.data.message
           this.snackbarColor = 'red'
-          console.log('EMail: ' + this.email)
         }
-      },
-
-      pushResetPasswordPage() {
-        this.$router.push('/reset-password')
       }
     }
   }
