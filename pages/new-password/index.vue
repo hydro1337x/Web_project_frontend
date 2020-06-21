@@ -24,13 +24,6 @@
               </v-toolbar>
               <v-card-text>
                 <v-form>
-                  <v-text-field v-model="oldPassword"
-                                label="Old password"
-                                name="oldPassword"
-                                type="password">
-
-                  </v-text-field>
-
                   <v-text-field v-model="newPassword"
                                 label="New password"
                                 name="newPassword"
@@ -49,7 +42,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer />
-                <v-btn color="primary" @click="handleResetPassword">Submit</v-btn>
+                <v-btn color="primary" @click="createNewPassword">Submit</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
@@ -70,6 +63,28 @@
           Close
         </v-btn>
       </v-snackbar>
+      <v-row justify="center">
+        <v-dialog v-model="dialog" persistent max-width="290">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
+              Open Dialog
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title class="headline">Alert</v-card-title>
+            <v-card-text>New password successfully created</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" text @click="$router.push('/login')">Okay</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
     </v-content>
   </v-app>
 </template>
@@ -83,9 +98,9 @@
     },
     data() {
       return {
-        oldPassword: '',
         newPassword: '',
         repeatedNewPassword: '',
+        dialog: false,
         snackbar: false,
         snackbarText: '',
         snackbarColor: ''
@@ -93,15 +108,16 @@
     },
     methods: {
 
-      async handleResetPassword() {
+      async createNewPassword() {
         try {
-          let res = await this.$axios.$post(env.axios.baseURL + '/auth/password/new', {
-            oldPassword: this.oldPassword,
+          let response = await this.$axios.$patch(env.axios.baseURL + 'auth/password/new', {
+            accessToken: this.$route.query.token,
             newPassword: this.newPassword,
             repeatedNewPassword: this.repeatedNewPassword
           })
-          if (res.success) {
-            this.$router.push('/login')
+          console.log(response)
+          if (response.success) {
+            this.dialog = true
           }
         } catch (e) {
           console.log(e)

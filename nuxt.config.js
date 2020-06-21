@@ -43,8 +43,23 @@ export default {
   */
   modules: [
     'nuxt-material-design-icons',
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/auth'
   ],
+
+  auth: {
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: 'auth/login', method: 'post', propertyName: 'data' },
+          user: false,
+          logout: false
+        },
+
+        tokenType: ''
+      }
+    }
+  },
 
   axios: {},
   /*

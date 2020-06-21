@@ -57,6 +57,29 @@
           Close
         </v-btn>
       </v-snackbar>
+
+      <v-row justify="center">
+        <v-dialog v-model="dialog" persistent max-width="290">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="primary"
+              dark
+              v-bind="attrs"
+              v-on="on"
+            >
+              Open Dialog
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title class="headline">Alert</v-card-title>
+            <v-card-text>A reset email has been successfully sent</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" text @click="$router.push('/login')">Okay</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
     </v-content>
   </v-app>
 </template>
@@ -71,6 +94,7 @@
     data() {
       return {
         email: '',
+        dialog: false,
         snackbar: false,
         snackbarText: '',
         snackbarColor: ''
@@ -84,7 +108,7 @@
             email: this.email
           })
           if (res.success) {
-            this.$router.push('/login')
+            this.dialog = true
           }
         } catch (e) {
           console.log(e)

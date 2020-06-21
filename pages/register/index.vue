@@ -6,6 +6,10 @@
         background-color="primary"
         dark
       >
+        <v-tab v-if="$auth.loggedIn" to="/">
+          Home
+        </v-tab>
+
         <v-tab to="/login">
           Login
         </v-tab>

@@ -6,6 +6,9 @@
         background-color="primary"
         dark
       >
+        <v-tab v-if="$auth.loggedIn" to="/">
+          Home
+        </v-tab>
         <v-tab to="/login">
           Login
         </v-tab>
@@ -108,12 +111,16 @@
     methods: {
 
       async handleLogin() {
+
         try {
-          let res = await this.$axios.$post(env.axios.baseURL + 'auth/login', {
-            email: this.email,
-            password: this.password
+          const response = await this.$auth.loginWith('local', {
+            data: {
+              email: this.email,
+              password: this.password
+            }
           })
-          if (res.success) {
+          console.log('response: ', response)
+          if (response.data.success) {
             this.$router.push('/')
           }
         } catch (e) {
@@ -121,7 +128,6 @@
           this.snackbar = true
           this.snackbarText = e.response.data.message
           this.snackbarColor = 'red'
-          console.log('EMail: ' + this.email)
         }
       },
 
