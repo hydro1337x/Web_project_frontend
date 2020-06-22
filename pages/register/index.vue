@@ -6,10 +6,6 @@
         background-color="primary"
         dark
       >
-        <v-tab v-if="$auth.loggedIn" to="/">
-          Home
-        </v-tab>
-
         <v-tab to="/login">
           Login
         </v-tab>
@@ -139,7 +135,7 @@
             lastName: this.lastName
           })
           if (res.success) {
-            this.$router.push('/')
+            this.$router.push('/login')
           }
         } catch (e) {
           console.log(e)
