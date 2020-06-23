@@ -102,15 +102,16 @@
           max-width="500"
           outlined
         >
-          <v-list-item three-line>
+          <v-list-item>
             <v-list-item-content>
               <v-list-item-title class="headline mb-1">{{post.title}}</v-list-item-title>
               <div class="d-flex align-center justify-space-between">
                 <v-list-item-subtitle class="text-left">{{'created at: ' + post.created_at}}</v-list-item-subtitle>
                 <v-list-item-subtitle class="text-right">{{'updated at: ' + post.updated_at}}</v-list-item-subtitle>
               </div>
-
-              <v-list-item-subtitle class="subtitle-1 mb-2">{{post.description}}</v-list-item-subtitle>
+              <div id="description">
+                {{post.description}}
+              </div>
             </v-list-item-content>
           </v-list-item>
 
@@ -190,5 +191,11 @@
 <style>
   #id {
     margin-top: 50px;
+  }
+
+  #description {
+    word-wrap: break-word;
+    width: 500px;
+    margin-top: 20px;
   }
 </style>
