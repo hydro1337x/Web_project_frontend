@@ -139,11 +139,15 @@
 
     middleware: 'auth',
 
+    mounted() {
+      this.getUser()
+    },
+
     data() {
       return {
-        email: this.$auth.user.email,
-        firstName: this.$auth.user.firstName,
-        lastName: this.$auth.user.lastName,
+        email: '',
+        firstName: '',
+        lastName: '',
         drawer: false,
         snackbar: false,
         snackbarText: '',
@@ -162,6 +166,22 @@
             this.snackbar = true
             this.snackbarText = response.message
             this.snackbarColor = 'primary'
+          }
+        } catch (e) {
+          console.log(e)
+          this.snackbar = true
+          this.snackbarText = e.response.data.message
+          this.snackbarColor = 'red'
+        }
+      },
+
+      async getUser() {
+        try {
+          let response = await this.$axios.$get(env.axios.baseURL + 'auth/user')
+          if (response.success) {
+            this.email = response.data.user.email
+            this.firstName = response.data.user.firstName
+            this.lastName = response.data.user.lastName
           }
         } catch (e) {
           console.log(e)

@@ -83,13 +83,25 @@
         </v-btn>
       </v-snackbar>
 
+      <v-row justify="center">
+        <v-dialog v-model="dialog" persistent max-width="290">
+          <v-card>
+            <v-card-title class="headline">Alert</v-card-title>
+            <v-card-text>Post successfully deleted</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="primary" text @click="dialog = false">Okay</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-row>
+
       <v-container id="container" v-for="(post, index) in posts" v-bind:key="post.user_id">
         <v-card
           class="mx-auto"
           max-width="500"
           outlined
         >
-
           <v-list-item three-line>
             <v-list-item-content>
               <v-list-item-title class="headline mb-1">{{post.title}}</v-list-item-title>
@@ -126,6 +138,7 @@
       return {
         posts: [],
         drawer: false,
+        dialog: false,
         snackbar: false,
         snackbarText: '',
         snackbarColor: ''
@@ -161,6 +174,7 @@
           })
           if (response.success) {
             this.posts.splice(index, 1)
+            this.dialog = true
           }
         } catch (e) {
           console.log(e)
